@@ -1,3 +1,4 @@
+let bodyParser = require('body-parser');
 let express = require('express');
 let app = express();
 
@@ -9,6 +10,8 @@ app.use((req, res, next) => {
 });
 
 app.use('/public', express.static('public'));
+app.use(bodyParser.urlencoded({ extended: false }));
+
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html');
@@ -32,8 +35,17 @@ app.get('/now',
   }
 );
 
+app.get('/:word/echo', (req, res) => {
+  res.json({ "echo": req.params.word });
+});
 
+app.get('/name', (req, res) => {
+  res.json({ "name": req.query["first"] + " " + req.query["last"] });
+});
 
+app.post('/name', (req, res) => {
+  res.json({ "name": req.body["first"] + " " + req.body["last"] });
+});
 
 
 
